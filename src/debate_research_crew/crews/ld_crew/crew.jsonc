@@ -1,0 +1,20 @@
+{
+  "name": "LD Debate Crew",
+  "agents": ["debate_ld"],
+  "tasks": [
+    {
+      "name": "ld_debate_task",
+      "description": "Using the validated research below, build complete Lincoln-Douglas debate preparation for {topic}.\n\nValidated Research:\n{validated_research}\n\nPrepare cases for BOTH Affirmative and Negative sides.",
+      "expected_output": "A tournament-ready LD debate brief in markdown with: Resolution Framing and Definitions, Affirmative Case (Value, Criterion, 2-3 Contentions with evidence), Negative Case (Value, Criterion, 2-3 Contentions with evidence), Cross-Examination Questions (for both sides), Rebuttal Blocks, and Weighing Strategy. Use national-circuit LD conventions.",
+      "agent": "debate_ld",
+      "output_file": "output/ld_debate_brief.md",
+      "markdown": true
+    }
+  ],
+  "process": "sequential",
+  "verbose": true,
+  "inputs": {
+    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States.",
+    "validated_research": ""
+  }
+}

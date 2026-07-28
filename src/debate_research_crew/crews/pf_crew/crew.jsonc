@@ -1,0 +1,20 @@
+{
+  "name": "PF Debate Crew",
+  "agents": ["debate_pf"],
+  "tasks": [
+    {
+      "name": "pf_debate_task",
+      "description": "Using the validated research below, build complete Public Forum debate preparation for {topic}.\n\nValidated Research:\n{validated_research}\n\nPrepare cases for BOTH Pro and Con sides.",
+      "expected_output": "A tournament-ready PF debate brief in markdown with: Resolution Interpretation and Definitions, Pro Constructive (2-3 contentions with evidence and warrants), Con Constructive (2-3 contentions with evidence and warrants), Rebuttal Outlines (for both sides), Summary Talking Points, and Final Focus Arguments. Follow NSDA PF speech structure and national-tournament evidence standards.",
+      "agent": "debate_pf",
+      "output_file": "output/pf_debate_brief.md",
+      "markdown": true
+    }
+  ],
+  "process": "sequential",
+  "verbose": true,
+  "inputs": {
+    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States.",
+    "validated_research": ""
+  }
+}

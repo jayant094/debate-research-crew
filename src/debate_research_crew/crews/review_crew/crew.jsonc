@@ -1,0 +1,20 @@
+{
+  "name": "Review Crew",
+  "agents": ["reviewer"],
+  "tasks": [
+    {
+      "name": "review_task",
+      "description": "Review and validate the following research report on {topic}:\n\n{research}\n\nFact-check claims, remove or flag weak sources, rate source quality, and reorganize findings into a debate-ready evidence bank. Note any claims that need additional verification.",
+      "expected_output": "A validated markdown brief with: Fact-Check Summary, Source Quality Ratings, Strongest Claims (with evidence), Weakest/Disputed Claims, and an Evidence Bank organized by theme (Pro arguments, Con arguments, and neutral context). Each evidence card should include claim, warrant, source URL, and reliability rating (High/Medium/Low).",
+      "agent": "reviewer",
+      "output_file": "output/validated_research.md",
+      "markdown": true
+    }
+  ],
+  "process": "sequential",
+  "verbose": true,
+  "inputs": {
+    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States.",
+    "research": ""
+  }
+}

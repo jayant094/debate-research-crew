@@ -1,0 +1,19 @@
+{
+  "name": "Research Crew",
+  "agents": ["researcher"],
+  "tasks": [
+    {
+      "name": "research_task",
+      "description": "Conduct thorough research on {topic}. Use web search to find recent, credible information from trusted sources only: major news outlets (Reuters, AP, BBC, NYT, WSJ), government agencies, peer-reviewed publications, and reputable organizations (Pew, Brookings, RAND, WHO, UN). Include key facts, statistics, expert quotes, and policy context relevant to debate. Flag any uncertain or conflicting claims.",
+      "expected_output": "A markdown research report (800-1500 words) with: Executive Summary, Key Facts and Statistics, Expert Perspectives, Policy Context, Conflicting Claims (if any), and a Sources section with full URLs. Every factual claim must have an inline citation or source link.",
+      "agent": "researcher",
+      "output_file": "output/research_report.md",
+      "markdown": true
+    }
+  ],
+  "process": "sequential",
+  "verbose": true,
+  "inputs": {
+    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States."
+  }
+}

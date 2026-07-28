@@ -1,0 +1,22 @@
+[project]
+name = "debate_research_crew"
+version = "0.1.0"
+description = "debate-research-crew using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools]>=1.15.8,<2.0.0"
+]
+
+[project.scripts]
+kickoff = "debate_research_crew.main:kickoff"
+run_crew = "debate_research_crew.main:kickoff"
+plot = "debate_research_crew.main:plot"
+run_with_trigger = "debate_research_crew.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"
