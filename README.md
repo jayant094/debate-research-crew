@@ -1,20 +1,19 @@
 # Debate Research Crew
 
-A CrewAI Flow project with four specialized agents that research a debate topic and produce tournament-ready LD and PF briefs.
+A CrewAI Flow project with three specialized agents that research, independently review, and clearly present evidence for a debate resolution.
 
 ## Agents
 
 | Agent | Role |
 |---|---|
-| **Researcher** | Researches topics using trusted publications and organizations (Serper web search) |
-| **Reviewer** | Validates research and organizes a debate-ready evidence bank |
-| **Debate_LD** | Builds Aff + Neg Lincoln-Douglas cases |
-| **Debate_PF** | Builds Pro + Con Public Forum cases |
+| **Researcher** | Finds and analyzes evidence from trusted publications, primary data, and reputable organizations using Serper web search |
+| **Reviewer** | Checks the research, evaluates reliability and substantiated bias/limitations, and identifies the side of the resolution the evidence supports |
+| **Presenter** | Delivers direct links, summaries, statistics and percentages, bias/limitations, reliability, and resolution support in one readable brief |
 
 ## Workflow
 
 ```
-Topic → Researcher → Reviewer → (Debate_LD + Debate_PF in parallel)
+Topic → Researcher → Reviewer → Presenter
 ```
 
 ## Setup
@@ -39,9 +38,8 @@ When prompted, enter a debate topic/resolution. Default topic is a sample water-
 | File | Description |
 |---|---|
 | `output/research_report.md` | Raw sourced research |
-| `output/validated_research.md` | Fact-checked evidence bank |
-| `output/ld_debate_brief.md` | LD Aff + Neg cases |
-| `output/pf_debate_brief.md` | PF Pro + Con cases |
+| `output/validated_research.md` | Fact-checked evidence bank with reliability, bias/limitations, and resolution-support assessments |
+| `output/debate_research_brief.md` | Final source cards with links, summaries, statistics, impact, and supported side |
 
 ## Trigger payload (optional)
 

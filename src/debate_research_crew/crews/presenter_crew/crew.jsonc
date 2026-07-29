@@ -1,0 +1,20 @@
+{
+  "name": "Presenter Crew",
+  "agents": ["presenter"],
+  "tasks": [
+    {
+      "name": "present_research_task",
+      "description": "Create a clear final briefing about {topic} using only this independently reviewed research:\n\n{validated_research}\n\nOrganize the information so a debater can quickly open each source, understand its central finding and numeric evidence, see its reliability and possible limitations, and identify which side of the resolution the evidence supports. Do not add facts, sources, percentages, or interpretations that are not in the reviewed research.",
+      "expected_output": "A markdown briefing with: (1) Resolution and a neutral one-paragraph overview; (2) Key takeaways grouped by Affirmative/Pro, Negative/Con, and Mixed/Neutral; (3) a Source Cards section with one card per reviewed source containing Title, Publisher, Date, clickable direct link, summary, key statistics/percentages with their population/timeframe/denominator, reliability rating, bias/limitations assessment, and supported side of the resolution; (4) Verification warnings; and (5) a short comparison of the strongest evidence on each side. Preserve uncertainty and use 'not reported' rather than guessing missing details.",
+      "agent": "presenter",
+      "output_file": "output/debate_research_brief.md",
+      "markdown": true
+    }
+  ],
+  "process": "sequential",
+  "verbose": true,
+  "inputs": {
+    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States.",
+    "validated_research": ""
+  }
+}

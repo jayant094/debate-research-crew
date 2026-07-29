@@ -4,8 +4,8 @@
   "tasks": [
     {
       "name": "research_task",
-      "description": "Conduct thorough research on {topic}. Use web search to find recent, credible information from trusted sources only: major news outlets (Reuters, AP, BBC, NYT, WSJ), government agencies, peer-reviewed publications, and reputable organizations (Pew, Brookings, RAND, WHO, UN). Include key facts, statistics, expert quotes, and policy context relevant to debate. Flag any uncertain or conflicting claims.",
-      "expected_output": "A markdown research report (800-1500 words) with: Executive Summary, Key Facts and Statistics, Expert Perspectives, Policy Context, Conflicting Claims (if any), and a Sources section with full URLs. Every factual claim must have an inline citation or source link.",
+      "description": "Conduct thorough research on {topic}. Use web search to find recent, credible information from trusted sources only: primary government and organization data, peer-reviewed publications, and major news outlets (Reuters, AP, BBC, NYT, WSJ). Find evidence relevant to both sides of the resolution. For every source, capture its title, publisher, publication date, direct URL, relevant claim, key statistics or percentages, and whether its evidence tends to support, oppose, or is neutral toward the resolution. Flag uncertain or conflicting claims.",
+      "expected_output": "A markdown research report (800-1500 words) with: Executive Summary, sourced evidence for each side, Key Facts and Statistics, Expert Perspectives, Policy Context, Conflicting Claims (if any), and a Sources section. Every factual claim must include an inline citation or source link. Do not invent statistics, quotes, publication dates, or URLs.",
       "agent": "researcher",
       "output_file": "output/research_report.md",
       "markdown": true

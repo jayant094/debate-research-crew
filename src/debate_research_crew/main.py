@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import asyncio
 import json
 import sys
 
@@ -7,8 +6,7 @@ from pydantic import BaseModel
 
 from crewai.flow import Flow, listen, start
 
-from debate_research_crew.crews.ld_crew.ld_crew import kickoff_ld_crew_async
-from debate_research_crew.crews.pf_crew.pf_crew import kickoff_pf_crew_async
+from debate_research_crew.crews.presenter_crew.presenter_crew import kickoff_presenter_crew
 from debate_research_crew.crews.research_crew.research_crew import kickoff_research_crew
 from debate_research_crew.crews.review_crew.review_crew import kickoff_review_crew
 
@@ -22,8 +20,7 @@ class DebateFlowState(BaseModel):
     topic: str = ""
     research_report: str = ""
     validated_research: str = ""
-    ld_brief: str = ""
-    pf_brief: str = ""
+    presentation: str = ""
 
 
 class DebateResearchFlow(Flow[DebateFlowState]):
@@ -55,38 +52,23 @@ class DebateResearchFlow(Flow[DebateFlowState]):
         print("Review complete: output/validated_research.md")
 
     @listen(run_review)
-    def run_debate_briefs(self):
-        print("Running Debate_LD and Debate_PF agents in parallel...")
+    def run_presentation(self):
+        print("Running Presenter agent...")
+        result = kickoff_presenter_crew(
+            inputs={
+                "topic": self.state.topic,
+                "validated_research": self.state.validated_research,
+            }
+        )
+        self.state.presentation = result.raw
+        print("Presentation complete: output/debate_research_brief.md")
 
-        async def _run_parallel():
-            return await asyncio.gather(
-                kickoff_ld_crew_async(
-                    inputs={
-                        "topic": self.state.topic,
-                        "validated_research": self.state.validated_research,
-                    }
-                ),
-                kickoff_pf_crew_async(
-                    inputs={
-                        "topic": self.state.topic,
-                        "validated_research": self.state.validated_research,
-                    }
-                ),
-            )
-
-        ld_result, pf_result = asyncio.run(_run_parallel())
-        self.state.ld_brief = ld_result.raw
-        self.state.pf_brief = pf_result.raw
-        print("LD brief complete: output/ld_debate_brief.md")
-        print("PF brief complete: output/pf_debate_brief.md")
-
-    @listen(run_debate_briefs)
+    @listen(run_presentation)
     def finalize(self):
         print("\nAll debate research outputs saved:")
         print("  - output/research_report.md")
         print("  - output/validated_research.md")
-        print("  - output/ld_debate_brief.md")
-        print("  - output/pf_debate_brief.md")
+        print("  - output/debate_research_brief.md")
 
 
 def kickoff():
@@ -119,4 +101,7 @@ def run_with_trigger():
 
 
 if __name__ == "__main__":
-    kickoff()
+    if len(sys.argv) > 1:
+        run_with_trigger()
+    else:
+        kickoff()
