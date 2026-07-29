@@ -31,7 +31,31 @@ Topic → Researcher → Reviewer → Presenter
 crewai run
 ```
 
-When prompted, enter a debate topic/resolution. Default topic is a sample water-resources LD resolution.
+`crewai run` uses the default water-resources resolution. To provide your own:
+
+```bash
+python -m debate_research_crew.main '{"topic": "Resolved: ..."}'
+```
+
+## Desktop app (Windows)
+
+After setup, double-click `run_desktop_app.bat`, or run:
+
+```powershell
+uv run debate-research-app
+```
+
+The desktop interface lets you enter a resolution, start the crew, read the completed briefing, save a copy, and open its output folder.
+
+### Build a shareable Windows app
+
+On a Windows machine with Python and `uv` installed, run:
+
+```powershell
+.\build_windows_app.ps1
+```
+
+The distributable app is created in `dist\DebateResearchCrew`. Place a `.env` file containing `OPENAI_API_KEY` and `SERPER_API_KEY` beside `DebateResearchCrew.exe` before running it. The app requires internet access to research sources and use the configured LLM.
 
 ## Outputs
 
@@ -42,9 +66,5 @@ When prompted, enter a debate topic/resolution. Default topic is a sample water-
 | `output/debate_research_brief.md` | Final source cards with links, summaries, statistics, impact, and supported side |
 
 ## Trigger payload (optional)
-
-```bash
-python -m debate_research_crew.main '{"topic": "Resolved: ..."}'
-```
 
 Or use the `run_with_trigger` script entry point with a JSON payload containing `"topic"`.
