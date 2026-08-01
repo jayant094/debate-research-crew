@@ -9,9 +9,7 @@
   "llm": "openai/gpt-4o",
   "settings": {
     "verbose": true,
-    "max_iter": 35,
-    "reasoning": true,
-    "max_reasoning_attempts": 3,
+    "max_iter": 25,
     "inject_date": true
   }
 }
