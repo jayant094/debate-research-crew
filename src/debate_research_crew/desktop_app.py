@@ -12,12 +12,6 @@ from tkinter import filedialog, messagebox, scrolledtext, ttk
 from debate_research_crew.main import DebateResearchFlow
 
 
-DEFAULT_TOPIC = (
-    "Resolved: The United States federal government should substantially increase "
-    "its protection of water resources in the United States."
-)
-
-
 def application_root() -> Path:
     """Use the project directory in development or the app directory when packaged."""
     if getattr(sys, "frozen", False):
@@ -35,7 +29,6 @@ class DebateResearchApp(tk.Tk):
         self.minsize(860, 660)
         self.geometry("1000x760")
 
-        self.topic = tk.StringVar(value=DEFAULT_TOPIC)
         self.status = tk.StringVar(
             value="Ready. Enter a resolution and select Research."
         )
@@ -64,7 +57,10 @@ class DebateResearchApp(tk.Tk):
             container, height=4, wrap=tk.WORD, font=("Segoe UI", 11)
         )
         self.topic_input.pack(fill=tk.X, pady=(5, 12))
-        self.topic_input.insert("1.0", self.topic.get())
+        self.topic_input.insert(
+            "1.0", "Resolved: Enter your debate resolution here."
+        )
+        self.topic_input.bind("<FocusIn>", self._clear_topic_placeholder, add="+")
 
         actions = ttk.Frame(container)
         actions.pack(fill=tk.X, pady=(0, 12))
@@ -95,10 +91,21 @@ class DebateResearchApp(tk.Tk):
             "Put both values in a .env file beside this app before starting research."
         )
 
+    def _clear_topic_placeholder(self, _event=None) -> None:
+        current = self.topic_input.get("1.0", tk.END).strip()
+        if current == "Resolved: Enter your debate resolution here.":
+            self.topic_input.delete("1.0", tk.END)
+
     def start_research(self) -> None:
         topic = self.topic_input.get("1.0", tk.END).strip()
-        if not topic:
-            messagebox.showerror("Resolution required", "Enter a debate resolution first.")
+        if (
+            not topic
+            or topic == "Resolved: Enter your debate resolution here."
+        ):
+            messagebox.showerror(
+                "Resolution required", "Enter a debate resolution first."
+            )
+            self.topic_input.focus_set()
             return
 
         self.run_button.configure(state=tk.DISABLED)

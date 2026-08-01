@@ -28,14 +28,16 @@ Topic → Researcher → Reviewer → Presenter
 ## Run
 
 ```bash
-crewai run
+uv run kickoff
 ```
 
-`crewai run` uses the default water-resources resolution. To provide your own:
+You will be prompted for a debate resolution. To pass one directly:
 
 ```bash
-python -m debate_research_crew.main '{"topic": "Resolved: ..."}'
+uv run run_with_trigger '{"topic": "Resolved: ..."}'
 ```
+
+See [HOW_TO_RUN.md](HOW_TO_RUN.md) for PowerShell examples and the desktop app.
 
 ## Desktop app (Windows)
 

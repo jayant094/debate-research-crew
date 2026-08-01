@@ -10,10 +10,29 @@ from debate_research_crew.crews.pf_crew.pf_crew import kickoff_pf_crew
 from debate_research_crew.crews.research_crew.research_crew import kickoff_research_crew
 from debate_research_crew.crews.review_crew.review_crew import kickoff_review_crew
 
-DEFAULT_TOPIC = (
-    "Resolved: The United States federal government should substantially increase "
-    "its protection of water resources in the United States."
-)
+
+def prompt_for_topic() -> str:
+    print("Enter the debate resolution / topic:")
+    while True:
+        try:
+            topic = input("> ").strip()
+        except EOFError as exc:
+            raise SystemExit(
+                "No topic provided. Pass one with "
+                'run_with_trigger \'{"topic": "Resolved: ..."}\' '
+                "or enter it interactively."
+            ) from exc
+        if topic:
+            return topic
+        print("A topic is required. Please enter a debate resolution.")
+
+
+def resolve_topic(crewai_trigger_payload: dict | None = None) -> str:
+    if crewai_trigger_payload:
+        topic = str(crewai_trigger_payload.get("topic") or "").strip()
+        if topic:
+            return topic
+    return prompt_for_topic()
 
 
 class DebateFlowState(BaseModel):
@@ -26,10 +45,7 @@ class DebateFlowState(BaseModel):
 class DebateResearchFlow(Flow[DebateFlowState]):
     @start()
     def set_topic(self, crewai_trigger_payload: dict | None = None):
-        if crewai_trigger_payload:
-            self.state.topic = crewai_trigger_payload.get("topic", DEFAULT_TOPIC)
-        else:
-            self.state.topic = DEFAULT_TOPIC
+        self.state.topic = resolve_topic(crewai_trigger_payload)
         print(f"Debate topic: {self.state.topic}")
         print("Format: Public Forum (PF) only — TOC Round-of-8 max depth")
 
@@ -90,6 +106,9 @@ def run_with_trigger():
         trigger_payload = json.loads(sys.argv[1])
     except json.JSONDecodeError as exc:
         raise Exception("Invalid JSON payload provided as argument") from exc
+
+    if not str(trigger_payload.get("topic") or "").strip():
+        trigger_payload["topic"] = prompt_for_topic()
 
     try:
         return DebateResearchFlow().kickoff(

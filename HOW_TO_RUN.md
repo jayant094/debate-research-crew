@@ -2,6 +2,8 @@
 
 Public Forum only by default. Pipeline: **Researcher → Reviewer → PF Strategist** (TOC Round-of-8 depth).
 
+There is **no hardcoded topic**. You must provide a resolution, or the CLI will ask for one.
+
 ## Prerequisites
 
 - Python 3.10–3.13
@@ -10,19 +12,24 @@ Public Forum only by default. Pipeline: **Researcher → Reviewer → PF Strateg
   - `OPENAI_API_KEY`
   - `SERPER_API_KEY`
 
-## Default topic
+## Interactive topic (recommended)
 
 ```bash
 uv run kickoff
 ```
 
-Uses the built-in water-resources resolution:
+You will be prompted:
 
-> Resolved: The United States federal government should substantially increase its protection of water resources in the United States.
+```text
+Enter the debate resolution / topic:
+>
+```
 
-## Custom topic (CLI)
+Paste or type your resolution, then press Enter.
 
-Pass a JSON payload with a `topic` field.
+## Topic via CLI argument
+
+Pass a JSON payload with a `topic` field. If `topic` is missing or empty, you will still be prompted.
 
 ### PowerShell
 
@@ -48,7 +55,7 @@ uv run python -m debate_research_crew.main '{\"topic\": \"Resolved: Your resolut
 uv run debate-research-app
 ```
 
-1. Enter (or edit) the resolution in the text box.
+1. Enter your resolution in the text box (required).
 2. Click **Research this resolution**.
 3. When finished, the PF brief appears in the window and is saved under `output/`.
 
