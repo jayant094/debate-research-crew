@@ -29,7 +29,7 @@ class DebateResearchApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.project_root = application_root()
-        self.output_path = self.project_root / "output" / "debate_research_brief.md"
+        self.output_path = self.project_root / "output" / "pf_debate_brief.md"
 
         self.title("Debate Research Crew")
         self.minsize(860, 660)
@@ -53,8 +53,8 @@ class DebateResearchApp(tk.Tk):
         ttk.Label(
             container,
             text=(
-                "Research trusted sources, review reliability and bias, then receive "
-                "a linked evidence briefing."
+                "PF-only TOC Round-of-8 pipeline: research trusted sources, review "
+                "citations, then produce a full Public Forum brief."
             ),
             wraplength=900,
         ).pack(anchor=tk.W, pady=(2, 16))
@@ -106,7 +106,7 @@ class DebateResearchApp(tk.Tk):
             "Research in progress. This can take several minutes while sources are "
             "searched, reviewed, and presented."
         )
-        self._set_report("Working…\n\nResearcher → Reviewer → Presenter")
+        self._set_report("Working…\n\nResearcher → Reviewer → PF Strategist")
         threading.Thread(target=self._run_flow, args=(topic,), daemon=True).start()
 
     def _run_flow(self, topic: str) -> None:
@@ -151,7 +151,7 @@ class DebateResearchApp(tk.Tk):
         destination = filedialog.asksaveasfilename(
             title="Save debate research briefing",
             defaultextension=".md",
-            initialfile="debate_research_brief.md",
+            initialfile="pf_debate_brief.md",
             filetypes=[("Markdown", "*.md"), ("Text", "*.txt"), ("All files", "*.*")],
         )
         if destination:

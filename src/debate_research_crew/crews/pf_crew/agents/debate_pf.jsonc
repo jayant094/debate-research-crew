@@ -5,7 +5,8 @@
   "llm": "openai/gpt-4o",
   "settings": {
     "verbose": true,
-    "max_iter": 20,
-    "inject_date": true
+    "max_iter": 25,
+    "inject_date": true,
+    "respect_context_window": true
   }
 }

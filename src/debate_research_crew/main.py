@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from crewai.flow import Flow, listen, start
 
-from debate_research_crew.crews.presenter_crew.presenter_crew import kickoff_presenter_crew
+from debate_research_crew.crews.pf_crew.pf_crew import kickoff_pf_crew
 from debate_research_crew.crews.research_crew.research_crew import kickoff_research_crew
 from debate_research_crew.crews.review_crew.review_crew import kickoff_review_crew
 
@@ -20,7 +20,7 @@ class DebateFlowState(BaseModel):
     topic: str = ""
     research_report: str = ""
     validated_research: str = ""
-    presentation: str = ""
+    pf_brief: str = ""
 
 
 class DebateResearchFlow(Flow[DebateFlowState]):
@@ -31,6 +31,7 @@ class DebateResearchFlow(Flow[DebateFlowState]):
         else:
             self.state.topic = DEFAULT_TOPIC
         print(f"Debate topic: {self.state.topic}")
+        print("Format: Public Forum (PF) only — TOC Round-of-8 max depth")
 
     @listen(set_topic)
     def run_research(self):
@@ -52,23 +53,23 @@ class DebateResearchFlow(Flow[DebateFlowState]):
         print("Review complete: output/validated_research.md")
 
     @listen(run_review)
-    def run_presentation(self):
-        print("Running Presenter agent...")
-        result = kickoff_presenter_crew(
+    def run_pf(self):
+        print("Running PF Debate agent...")
+        result = kickoff_pf_crew(
             inputs={
                 "topic": self.state.topic,
                 "validated_research": self.state.validated_research,
             }
         )
-        self.state.presentation = result.raw
-        print("Presentation complete: output/debate_research_brief.md")
+        self.state.pf_brief = result.raw
+        print("PF brief complete: output/pf_debate_brief.md")
 
-    @listen(run_presentation)
+    @listen(run_pf)
     def finalize(self):
-        print("\nAll debate research outputs saved:")
+        print("\nAll PF debate research outputs saved:")
         print("  - output/research_report.md")
         print("  - output/validated_research.md")
-        print("  - output/debate_research_brief.md")
+        print("  - output/pf_debate_brief.md")
 
 
 def kickoff():
