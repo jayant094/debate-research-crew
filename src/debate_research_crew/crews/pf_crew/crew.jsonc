@@ -4,8 +4,8 @@
   "tasks": [
     {
       "name": "pf_debate_task",
-      "description": "Using the validated research below, build complete Public Forum debate preparation for {topic}.\n\nValidated Research:\n{validated_research}\n\nPrepare cases for BOTH Pro and Con sides.",
-      "expected_output": "A tournament-ready PF debate brief in markdown with: Resolution Interpretation and Definitions, Pro Constructive (2-3 contentions with evidence and warrants), Con Constructive (2-3 contentions with evidence and warrants), Rebuttal Outlines (for both sides), Summary Talking Points, and Final Focus Arguments. Follow NSDA PF speech structure and national-tournament evidence standards.",
+      "description": "Using only the validated research below, construct an advanced Public Forum file for a TOC Round of 8 on {topic}.\n\nValidated Research:\n{validated_research}\n\nDo not invent evidence, citations, warrants, or quotations. If the validated research is marked RESEARCH BLOCKED or lacks cardable sources, say so prominently and produce a research roadmap rather than a fictional case. Treat the resolution as a policy question: identify the most defensible interpretation, the implementation burden, and whether the advocacy must defend a temporary pause, its trigger, exemptions, federal authority, enforcement, and exit condition. Build both sides around comparative mechanisms rather than a list of generic pros and cons.",
+      "expected_output": "A 6,000-10,000 word TOC Round-of-8 PF brief in markdown. Required sections: (1) resolution interpretation, burdens, and plan-text ambiguity; (2) judge instruction and impact calculus; (3) Pro constructive with two or three complete link chains—uniqueness, link, internal link, impact, evidence comparison, and likely answers; (4) Con constructive with two or three complete link chains, including a specific alternative-policy or solvency-deficit strategy where the evidence supports one; (5) carded evidence appendix containing tag, quotation/paraphrase label, author/institution, title, date, URL, locator, and analytic warrant; (6) turns, delinks, and impact-defense blocks for each contention; (7) crossfire questions designed to expose assumptions and citation gaps; (8) first- and second-rebuttal collapse paths; (9) summary extensions with comparative weighing; (10) final-focus scripts that crystallize a single ballot story; (11) a flowable frontlines index; and (12) a complete bibliography. Mark empirical uncertainty and source limitations instead of smoothing them over.",
       "agent": "debate_pf",
       "output_file": "output/pf_debate_brief.md",
       "markdown": true
@@ -14,7 +14,7 @@
   "process": "sequential",
   "verbose": true,
   "inputs": {
-    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States.",
+    "topic": "",
     "validated_research": ""
   }
 }

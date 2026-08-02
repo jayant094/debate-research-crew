@@ -3,10 +3,26 @@
   "agents": ["researcher"],
   "tasks": [
     {
-      "name": "research_task",
-      "description": "Conduct thorough research on {topic}. Use web search to find recent, credible information from trusted sources only: major news outlets (Reuters, AP, BBC, NYT, WSJ), government agencies, peer-reviewed publications, and reputable organizations (Pew, Brookings, RAND, WHO, UN). Include key facts, statistics, expert quotes, and policy context relevant to debate. Flag any uncertain or conflicting claims.",
-      "expected_output": "A markdown research report (800-1500 words) with: Executive Summary, Key Facts and Statistics, Expert Perspectives, Policy Context, Conflicting Claims (if any), and a Sources section with full URLs. Every factual claim must have an inline citation or source link.",
+      "name": "source_scan_task",
+      "description": "Find the strongest available sources for a TOC Round-of-8 Public Forum debate on {topic}.\n\nRun 8-12 targeted searches, one or two at a time so context stays manageable. Vary them deliberately across: enacted or proposed law and legislative text; federal agency and regulator documents; nonpartisan legislative research; peer-reviewed research; independent technical or system reports when relevant; state and local policy actions that already exist; and the strongest available material for the opposing side. Search for evidence that undercuts expanded federal protection as hard as evidence that supports it.\n\nDo not read full documents in this task and do not write evidence cards yet. Your only job is to produce a vetted shortlist of the best 20-28 candidate sources.",
+      "expected_output": "A markdown shortlist of 20-28 candidate sources. For each: the exact URL, the publisher or author, the apparent publication date, the source tier (primary law/agency, nonpartisan legislative research, peer-reviewed, technical/system, company, or advocacy), which side it most likely serves (Pro, Con, or shared context), and one line on the specific claim you expect it to support. Group them by tier. Exclude any source you cannot give a direct URL for.",
       "agent": "researcher",
+      "markdown": true
+    },
+    {
+      "name": "evidence_extraction_task",
+      "description": "Using the shortlist, read the highest-value sources with the read_source_document tool and extract cardable material for {topic}.\n\nPrioritize primary law, agency, nonpartisan legislative research, peer-reviewed, and high-value technical sources. Read at least 12 documents, one or two at a time. If a URL fails to retrieve or returns no text, record it as unavailable and move on rather than retrying it repeatedly or substituting a guess.\n\nFor each source you successfully read, capture only what the text actually says. Copy short exact excerpts, and clearly label anything you compress as a paraphrase. Capture the author or institution, full title, publication date, direct URL, and the page, table, figure, or section locator when the document provides one. Note the methodology and any limitation the source itself states, such as whether a number is an observed measurement or a projection scenario.\n\nNever invent a statistic, quotation, date, or citation. An unavailable source is an acceptable result; a fabricated one is not.",
+      "expected_output": "A markdown extraction log covering every source you attempted. For each successfully read source: tag, exact excerpt(s) in quotation marks, clearly labeled paraphrase where used, author/institution, title, date, direct URL, locator, source tier, methodology or stated limitation, and whether the figure is observed or projected. List unavailable sources separately with the reason. Aim for 18-24 usable extractions.",
+      "agent": "researcher",
+      "context": ["source_scan_task"],
+      "markdown": true
+    },
+    {
+      "name": "research_report_task",
+      "description": "Assemble the extracted evidence into a debate evidence file on {topic}.\n\nOrganize it for argument construction, not as a general summary. Separate what the evidence proves from what an advocate would have to argue. Identify where the two sides' best evidence directly collides, which links are weakest, and which claims rest on projections rather than observed data. Include existing state or local policy precedent if the research found any, since it bears on both feasibility and on whether federal action is necessary.\n\nCarry forward every citation intact. Do not add any new factual claim that is not supported by the extraction log.",
+      "expected_output": "A markdown evidence file with: (1) resolution and plan-text ambiguity map; (2) source hierarchy and methodology note; (3) Pro evidence cards; (4) Con evidence cards; (5) shared context cards, including existing policy precedent; (6) direct evidence collisions and internal-link weaknesses; (7) alternative policies and solvency questions; (8) forecasting uncertainty and evidentiary limits; (9) research gaps; and (10) full bibliography with direct URLs. Every card keeps its complete citation and its observed-versus-projected label.",
+      "agent": "researcher",
+      "context": ["evidence_extraction_task"],
       "output_file": "output/research_report.md",
       "markdown": true
     }
@@ -14,6 +30,6 @@
   "process": "sequential",
   "verbose": true,
   "inputs": {
-    "topic": "Resolved: The United States federal government should substantially increase its protection of water resources in the United States."
+    "topic": ""
   }
 }

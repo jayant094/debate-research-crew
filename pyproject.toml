@@ -13,6 +13,7 @@ kickoff = "debate_research_crew.main:kickoff"
 run_crew = "debate_research_crew.main:kickoff"
 plot = "debate_research_crew.main:plot"
 run_with_trigger = "debate_research_crew.main:run_with_trigger"
+debate-research-app = "debate_research_crew.desktop_app:main"
 
 [build-system]
 requires = ["hatchling"]

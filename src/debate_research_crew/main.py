@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import asyncio
 import json
 import sys
 
@@ -7,33 +6,48 @@ from pydantic import BaseModel
 
 from crewai.flow import Flow, listen, start
 
-from debate_research_crew.crews.ld_crew.ld_crew import kickoff_ld_crew_async
-from debate_research_crew.crews.pf_crew.pf_crew import kickoff_pf_crew_async
+from debate_research_crew.crews.pf_crew.pf_crew import kickoff_pf_crew
 from debate_research_crew.crews.research_crew.research_crew import kickoff_research_crew
 from debate_research_crew.crews.review_crew.review_crew import kickoff_review_crew
 
-DEFAULT_TOPIC = (
-    "Resolved: The United States federal government should substantially increase "
-    "its protection of water resources in the United States."
-)
+
+def prompt_for_topic() -> str:
+    print("Enter the debate resolution / topic:")
+    while True:
+        try:
+            topic = input("> ").strip()
+        except EOFError as exc:
+            raise SystemExit(
+                "No topic provided. Pass one with "
+                'run_with_trigger \'{"topic": "Resolved: ..."}\' '
+                "or enter it interactively."
+            ) from exc
+        if topic:
+            return topic
+        print("A topic is required. Please enter a debate resolution.")
+
+
+def resolve_topic(crewai_trigger_payload: dict | None = None) -> str:
+    if crewai_trigger_payload:
+        topic = str(crewai_trigger_payload.get("topic") or "").strip()
+        if topic:
+            return topic
+    return prompt_for_topic()
 
 
 class DebateFlowState(BaseModel):
     topic: str = ""
     research_report: str = ""
     validated_research: str = ""
-    ld_brief: str = ""
     pf_brief: str = ""
 
 
 class DebateResearchFlow(Flow[DebateFlowState]):
     @start()
     def set_topic(self, crewai_trigger_payload: dict | None = None):
-        if crewai_trigger_payload:
-            self.state.topic = crewai_trigger_payload.get("topic", DEFAULT_TOPIC)
-        else:
-            self.state.topic = DEFAULT_TOPIC
+        self.state.topic = resolve_topic(crewai_trigger_payload)
         print(f"Debate topic: {self.state.topic}")
+        print("Format: Public Forum (PF) only — TOC Round-of-8 max depth")
 
     @listen(set_topic)
     def run_research(self):
@@ -55,37 +69,22 @@ class DebateResearchFlow(Flow[DebateFlowState]):
         print("Review complete: output/validated_research.md")
 
     @listen(run_review)
-    def run_debate_briefs(self):
-        print("Running Debate_LD and Debate_PF agents in parallel...")
-
-        async def _run_parallel():
-            return await asyncio.gather(
-                kickoff_ld_crew_async(
-                    inputs={
-                        "topic": self.state.topic,
-                        "validated_research": self.state.validated_research,
-                    }
-                ),
-                kickoff_pf_crew_async(
-                    inputs={
-                        "topic": self.state.topic,
-                        "validated_research": self.state.validated_research,
-                    }
-                ),
-            )
-
-        ld_result, pf_result = asyncio.run(_run_parallel())
-        self.state.ld_brief = ld_result.raw
-        self.state.pf_brief = pf_result.raw
-        print("LD brief complete: output/ld_debate_brief.md")
+    def run_pf(self):
+        print("Running PF Debate agent...")
+        result = kickoff_pf_crew(
+            inputs={
+                "topic": self.state.topic,
+                "validated_research": self.state.validated_research,
+            }
+        )
+        self.state.pf_brief = result.raw
         print("PF brief complete: output/pf_debate_brief.md")
 
-    @listen(run_debate_briefs)
+    @listen(run_pf)
     def finalize(self):
-        print("\nAll debate research outputs saved:")
+        print("\nAll PF debate research outputs saved:")
         print("  - output/research_report.md")
         print("  - output/validated_research.md")
-        print("  - output/ld_debate_brief.md")
         print("  - output/pf_debate_brief.md")
 
 
@@ -108,6 +107,9 @@ def run_with_trigger():
     except json.JSONDecodeError as exc:
         raise Exception("Invalid JSON payload provided as argument") from exc
 
+    if not str(trigger_payload.get("topic") or "").strip():
+        trigger_payload["topic"] = prompt_for_topic()
+
     try:
         return DebateResearchFlow().kickoff(
             {"crewai_trigger_payload": trigger_payload}
@@ -119,4 +121,7 @@ def run_with_trigger():
 
 
 if __name__ == "__main__":
-    kickoff()
+    if len(sys.argv) > 1:
+        run_with_trigger()
+    else:
+        kickoff()

@@ -1,20 +1,19 @@
 # Debate Research Crew
 
-A CrewAI Flow project with four specialized agents that research a debate topic and produce tournament-ready LD and PF briefs.
+A CrewAI Flow project with three specialized agents that research, independently review, and clearly present evidence for a debate resolution.
 
 ## Agents
 
 | Agent | Role |
 |---|---|
-| **Researcher** | Researches topics using trusted publications and organizations (Serper web search) |
-| **Reviewer** | Validates research and organizes a debate-ready evidence bank |
-| **Debate_LD** | Builds Aff + Neg Lincoln-Douglas cases |
-| **Debate_PF** | Builds Pro + Con Public Forum cases |
+| **Researcher** | Finds and analyzes evidence from trusted publications, primary data, and reputable organizations using Serper web search |
+| **Reviewer** | Checks the research, evaluates reliability and substantiated bias/limitations, and identifies the side of the resolution the evidence supports |
+| **Presenter** | Delivers direct links, summaries, statistics and percentages, bias/limitations, reliability, and resolution support in one readable brief |
 
 ## Workflow
 
 ```
-Topic → Researcher → Reviewer → (Debate_LD + Debate_PF in parallel)
+Topic → Researcher → Reviewer → Presenter
 ```
 
 ## Setup
@@ -29,24 +28,45 @@ Topic → Researcher → Reviewer → (Debate_LD + Debate_PF in parallel)
 ## Run
 
 ```bash
-crewai run
+uv run kickoff
 ```
 
-When prompted, enter a debate topic/resolution. Default topic is a sample water-resources LD resolution.
+You will be prompted for a debate resolution. To pass one directly:
+
+```bash
+uv run run_with_trigger '{"topic": "Resolved: ..."}'
+```
+
+See [HOW_TO_RUN.md](HOW_TO_RUN.md) for PowerShell examples and the desktop app.
+
+## Desktop app (Windows)
+
+After setup, double-click `run_desktop_app.bat`, or run:
+
+```powershell
+uv run debate-research-app
+```
+
+The desktop interface lets you enter a resolution, start the crew, read the completed briefing, save a copy, and open its output folder.
+
+### Build a shareable Windows app
+
+On a Windows machine with Python and `uv` installed, run:
+
+```powershell
+.\build_windows_app.ps1
+```
+
+The distributable app is created in `dist\DebateResearchCrew`. Place a `.env` file containing `OPENAI_API_KEY` and `SERPER_API_KEY` beside `DebateResearchCrew.exe` before running it. The app requires internet access to research sources and use the configured LLM.
 
 ## Outputs
 
 | File | Description |
 |---|---|
 | `output/research_report.md` | Raw sourced research |
-| `output/validated_research.md` | Fact-checked evidence bank |
-| `output/ld_debate_brief.md` | LD Aff + Neg cases |
-| `output/pf_debate_brief.md` | PF Pro + Con cases |
+| `output/validated_research.md` | Fact-checked evidence bank with reliability, bias/limitations, and resolution-support assessments |
+| `output/debate_research_brief.md` | Final source cards with links, summaries, statistics, impact, and supported side |
 
 ## Trigger payload (optional)
-
-```bash
-python -m debate_research_crew.main '{"topic": "Resolved: ..."}'
-```
 
 Or use the `run_with_trigger` script entry point with a JSON payload containing `"topic"`.
